@@ -1,52 +1,134 @@
-setwd("~/Desktop/R") # Setting a working directory
+# Angela Xinye Yang's HW 3
+
+#Q1
+
+x=seq(300, 500, 0.05)
+curve(dnorm(x, 400,30),xlim=c(300,500),xaxs="i",yaxs="i",las=1,frame.plot=FALSE, axes=FALSE)
+axis(1, at=c(300, 350,450,500),xpd=TRUE,pos=0)
+segments(425,0,425,dnorm(425,400,30), xpd=TRUE,col = "blue")
+segments(450,0,450,dnorm(450,400,30), xpd=TRUE,col = "blue")
+text(400,-0.007,expression(mu~"=400"),xpd=TRUE,col = "red")
+text(514, 0,expression(italic(x)),xpd=TRUE,cex = 1.1)
+arrows(290,0,510,0,length = 0.1,code=3,xpd=TRUE)
+for (i in 425:450)
+{
+  rect(i,0,i,dnorm(i,400,30),col="blue", angle=45, density=19,border=NA,lty=1)
+}
+segments(400,0,400,dnorm(400,400,30),xpd=TRUE, col = "red",lty=2)
+axis(1, at=c(300,350,450,500),xpd=TRUE, col="red", lty=2)
+segments(425,0,425,dnorm(425,400,30),xpd=TRUE, col="blue")
+segments(450,0,450,dnorm(450,400,30),xpd=TRUE, col="blue")
+text(400,-0.00096, expression(mu~"400"),xpd=TRUE, col="red")
+text(514,0, expression(italic(x)),xpd=TRUE, cex=1.1)
+arrows(285,0,510,0,length=0.1, code=3,xpd=TRUE)
+
+#Q2
+
+d1<-c(rep("Brocas",5),rep("Anomic",10),rep("Conduction",7))
+d1_f<-table(d1)
+percent<-round(d1_f/sum(d1_f)*100,2)
+percent
+d1_p<-paste(d1_f,", ",percent,"%",sep="")
+pie(d1_f,labels=d1_p, main="Pie chart for the variable gender")
+pie(d1_f,
+    labels=d1_p,
+    main="Fig,2 Pie chart for the variable Aphasia)",
+    col=c("green","red","blue"),
+    col.main="blue",
+    cex=1,
+    cex.main=1.5,
+    border="black")
+text(-.42, -.2, expression("Brocas"), xpd = TRUE,cex=.9)
+text(0.22, -.4, expression("Conduction"), xpd = TRUE,cex=.9)
+text(0.12, 0.35, expression("Anomic"), xpd = TRUE,cex=.9)
+
+
+#Q3 The mean is x=5.8
+
+dev.new(width=5,height=3.5)
+
+par(mai=c(1,1,1,1)) # bottom, left, top, right
+par(mfrow=c(2,1)) 
+x<-c(5.7, 6.0, 5.8, 5.4, 5.6, 6.0, 5.5, 6.2, 6.0, 6.0, 5.5, 5.8, 5.6, 5.7, 5.9, 6.0, 6.1, 5.5, 5.7, 6.1)
+
+
+x1<-min(x)
+x2<-max(x)
+
+stripchart(x,method="stack",pch=19,cex=2,frame.plot=FALSE,
+           xaxt="n",
+           col="blue",
+           xlim=c(x1,x2))
+
+axis(1,pos=.96,at=c(seq(x1,x2,0.1)),tck=-.02,padj=.05)
+
+arrows(x1,.96,x2+.1,.96,code =2,length=.10,xpd=TRUE )
+arrows(x1,.96,x1-.1,.96,code =2,length=.10,xpd=TRUE )
+
+text(5.5,.25,expression("3(a) Dot plot of the heights showing mean as a function"),
+     xpd=TRUE,cex=0.5)
+
+
+par(mai=c(1,1,1,1))  
+
+x<-c(5.7, 6.0, 5.8, 5.4, 5.6, 6.0, 5.5, 6.2, 6.0, 6.0, 5.5, 5.8, 5.6, 5.7, 5.9, 6.0, 6.1, 5.5, 5.7, 6.1)
+x<-sort(x)
+n<-length(x)
+f<-rep(1/n,n)
+F<-cumsum(f)
+x1<-min(x)
+x2<-max(x)
+
+plot(x,F,type="s",
+     xlim=c(x1-.5,x2),
+     ylim=c(0,1),
+     las=1,
+     xaxs="i",yaxs="i",
+     frame.plot=FALSE,
+     xaxt="n",
+     xlab="",ylab="")
+
+axis(1,at=c(seq(x1,x2,1)))
+
+arrows(x1-.5,0,x2+.3,0,xpd=TRUE,code=2,length=.12)
+arrows(x1-.49,-.03,x1-.49,1.1,xpd=TRUE,code=2,length=.12)
+
+segments(x1-.49,1,x2,1,lty=2)
+segments(x2,1,x2+.3,1,lty=1,xpd=TRUE)
+
+segments(x1,0,x1,F[1])
+segments(mean(x),0,mean(x),1.10,xpd=TRUE,lwd=2)
+
+m<-mean(x)
+arrows(m-.1,1.01,m-.01,1.01,code=1,xpd=TRUE,length=.065)
+arrows(m+.1,1.01,m+.01,1.01,code=1,xpd=TRUE,length=.065)
+
+text(m,1.14,expression(nu),cex=1.2,xpd=TRUE)
+text(m,-.0,expression(bar(x)),cex=1.2,xpd=TRUE)
+
+text(x2+.45,0,expression(italic(x)),cex=1.2,xpd=TRUE)
+text(x1-.5,1.15,expression(ECDF~italic(F)~of~italic(x)),cex=.8,xpd=TRUE)
+
+for (i in 1:length(x))
+{
+  if (x[i]<m)
+    rect(x[i],0,m,F[i],col="blue",angle=135,density=15,border=NA)
+  else
+    rect(m,F[i-1],x[i],F[i],col="red",angle=45,density=15,border=NA)
+}
+ text(5.4, -0.2,"3(b) ECDF plot of the herights showing mean")
+ text(6.26,0,"x",xpd=TRUE, cex=1)
+
+# Q4
+
+setwd("~/Desktop/R")
 dir()
-family=read.csv("familyxx.csv" )
-person=read.csv("personsx.csv")
-adult=read.csv("samadult.csv")
-f=family[c(6,3,7)]
-p=person[c(40,25,1,49,592,12)]
-a=adult[c(1,2,3,7,9)]
-adult_person=merge(adult,person, by=c("HHX","FPX","FMX") ,all.adult=all)
-adult_person=merge(a,p, by=c("HHX","FPX","FMX"),all.a=all)
-adult_person_family=merge(adult_person, f,by=c("HHX","FMX"),all.adult_person=all)
-names(adult_person_family)
-library(sqldf)
-sqldf("SELECT * FROM adult_person_family WHERE EDUC1<97")
-final=sqldf("SELECT * FROM adult_person_family WHERE EDUC1<97")
-sqldf("SELECT * FROM adult_person_family WHERE PNMED12M<7")
-final=sqldf("SELECT * FROM adult_person_family WHERE PNMED12M<7")
-final=sqldf("SELECT * FROM adult_person_family WHERE PNMED12M<7")
-names(final)
-final$AGE_P[final$AGE_P>=18 &final$AGE_P<=29]=1
-final$AGE_P[final$AGE_P>=30 &final$AGE_P<=39]=2
-final$AGE_P[final$AGE_P>=40 &final$AGE_P<=49]=3
-final$AGE_P[final$AGE_P>=50 &final$AGE_P<=59]=4
-final$AGE_P[final$AGE_P>=60]=5
-
-head(final, n=10)
-final$AGE[final$AGE_P>=18 &final$AGE_P<=29]=1
-final$AGE[final$AGE_P>=30 &final$AGE_P<=39]=2
-final$AGE[final$AGE_P>=40 &final$AGE_P<=49]=3
-final$AGE[final$AGE_P>=50 &final$AGE_P<=59]=4
-final$AGE[final$AGE_P>=60]=5
-
-head(final, n=10)
-final$R_MARITL1[final$R_MARITL==1|final$R_MARITL==2]=1
-final$R_MARITL1[final$R_MARITL==7]=2
-final$R_MARITL1[final$R_MARITL == 4 | final$R_MARITL == 5 | final$R_MARITL == 6 | final$R_MARITL == 8 | final$R_MARITL == 9] = 3
-
-head(final, n=50)
-
-final$EDU[final$EDUC1<=12]=1
-final$EDU[final$EDUC1==13|final$EDUC1==14]=2
-final$EDU[final$EDUC1==15]=3
-final$EDU[final$EDUC1>=16]=4
-
-final$FAM_SIZE[final$FM_SIZE<=4]=1
-final$FAM_SIZE[final$FM_SIZE>4]=2
-head(final, n=50)
-nrow(final)
-nrow(adult)
-nrow(adult_person)
-nrow(adult_person_family)
-nrow(c)
+data<-read.csv("blood.csv")
+table(data$COMP)
+blood1<-subset(data, data$COMP!="NONE", select= c("DRUG","COMP"))
+blood2<-table(blood1)[,-3]
+percentage<-round(blood2/sum(blood2)*100,1)
+barplot(percentage,las=1,col=c("blue","red"), beside=TRUE)
+segments(0.68,0,0.68,32,xpd=TRUE,lwd =1)
+segments(0.4, 0,10,0,xpd=TRUE)
+legend(8,33,fill  = c("blue","red"),legend=c("NO","YES"),xpd=TRUE, bty = "n",title =expression(bold(DRUG)))   
