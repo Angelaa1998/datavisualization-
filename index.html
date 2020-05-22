@@ -1,0 +1,52 @@
+setwd("~/Desktop/R") # Setting a working directory
+dir()
+family=read.csv("familyxx.csv" )
+person=read.csv("personsx.csv")
+adult=read.csv("samadult.csv")
+f=family[c(6,3,7)]
+p=person[c(40,25,1,49,592,12)]
+a=adult[c(1,2,3,7,9)]
+adult_person=merge(adult,person, by=c("HHX","FPX","FMX") ,all.adult=all)
+adult_person=merge(a,p, by=c("HHX","FPX","FMX"),all.a=all)
+adult_person_family=merge(adult_person, f,by=c("HHX","FMX"),all.adult_person=all)
+names(adult_person_family)
+library(sqldf)
+sqldf("SELECT * FROM adult_person_family WHERE EDUC1<97")
+final=sqldf("SELECT * FROM adult_person_family WHERE EDUC1<97")
+sqldf("SELECT * FROM adult_person_family WHERE PNMED12M<7")
+final=sqldf("SELECT * FROM adult_person_family WHERE PNMED12M<7")
+final=sqldf("SELECT * FROM adult_person_family WHERE PNMED12M<7")
+names(final)
+final$AGE_P[final$AGE_P>=18 &final$AGE_P<=29]=1
+final$AGE_P[final$AGE_P>=30 &final$AGE_P<=39]=2
+final$AGE_P[final$AGE_P>=40 &final$AGE_P<=49]=3
+final$AGE_P[final$AGE_P>=50 &final$AGE_P<=59]=4
+final$AGE_P[final$AGE_P>=60]=5
+
+head(final, n=10)
+final$AGE[final$AGE_P>=18 &final$AGE_P<=29]=1
+final$AGE[final$AGE_P>=30 &final$AGE_P<=39]=2
+final$AGE[final$AGE_P>=40 &final$AGE_P<=49]=3
+final$AGE[final$AGE_P>=50 &final$AGE_P<=59]=4
+final$AGE[final$AGE_P>=60]=5
+
+head(final, n=10)
+final$R_MARITL1[final$R_MARITL==1|final$R_MARITL==2]=1
+final$R_MARITL1[final$R_MARITL==7]=2
+final$R_MARITL1[final$R_MARITL == 4 | final$R_MARITL == 5 | final$R_MARITL == 6 | final$R_MARITL == 8 | final$R_MARITL == 9] = 3
+
+head(final, n=50)
+
+final$EDU[final$EDUC1<=12]=1
+final$EDU[final$EDUC1==13|final$EDUC1==14]=2
+final$EDU[final$EDUC1==15]=3
+final$EDU[final$EDUC1>=16]=4
+
+final$FAM_SIZE[final$FM_SIZE<=4]=1
+final$FAM_SIZE[final$FM_SIZE>4]=2
+head(final, n=50)
+nrow(final)
+nrow(adult)
+nrow(adult_person)
+nrow(adult_person_family)
+nrow(c)
